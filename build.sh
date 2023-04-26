@@ -1,10 +1,26 @@
 #!/bin/sh
+
+# Variables
+CC=gcc
+CFLAGS='-Wall -Wextra -pedantic -std=c99'
+SRC_DIR=src
+BUILD_DIR=build
+EXECUTABLE=vm
+HEADERS=$SRC_DIR/*.h
+SOURCES=$SRC_DIR/*.c
+
 set -xe
 
-CC='cc'
-CFLAGS='-Wall -Wextra -std=c99 -pedantic'
-CLIBS=""
-SRC="main.c"
-NAME="vm"
+mkdir -p $BUILD_DIR
 
-$CC $CFLAGS -o $NAME $SRC $CLIBS
+# Compile Object Files
+for file in $SOURCES; do
+	filename=$(basename -- "$file")
+	object_file="$BUILD_DIR/${filename%.c}.o"
+	$CC $CFLAGS -c -o $object_file $file
+done
+
+# Build Executable
+$CC $CFLAGS -o $BUILD_DIR/$EXECUTABLE $BUILD_DIR/*.o
+
+echo "Success!"
