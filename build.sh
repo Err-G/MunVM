@@ -9,7 +9,7 @@ EXECUTABLE=vm
 HEADERS=$SRC_DIR/*.h
 SOURCES=$SRC_DIR/*.c
 
-set -xe
+set -e
 
 mkdir -p $BUILD_DIR
 
