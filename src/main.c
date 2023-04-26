@@ -19,6 +19,7 @@ test(vm_p vm) {
 
 int
 main(void) {
+	mem_verify();
 	vm_t vm;
 	vm_init(&vm);
 	test(&vm);
