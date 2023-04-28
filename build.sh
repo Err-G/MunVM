@@ -21,6 +21,9 @@ for file in $SOURCES; do
 done
 
 # Build Executable
-$CC $CFLAGS -o $BUILD_DIR/$EXECUTABLE $BUILD_DIR/*.o
+$CC $CFLAGS -o $EXECUTABLE $BUILD_DIR/*.o
+
+# Clear Object files
+rm -rf $BUILD_DIR/
 
 echo "Success!"
