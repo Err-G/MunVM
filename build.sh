@@ -4,26 +4,27 @@
 CC=gcc
 CFLAGS='-Wall -Wextra -pedantic -std=c99'
 SRC_DIR=src
-BUILD_DIR=build
 EXECUTABLE=vm
 HEADERS=$SRC_DIR/*.h
 SOURCES=$SRC_DIR/*.c
 
 set -e
 
-mkdir -p $BUILD_DIR
-
 # Compile Object Files
+echo "Compiling object files..."
 for file in $SOURCES; do
 	filename=$(basename -- "$file")
-	object_file="$BUILD_DIR/${filename%.c}.o"
+	object_file="${filename%.c}.o"
+	echo "Compiling $file..."
 	$CC $CFLAGS -c -o $object_file $file
 done
 
 # Build Executable
-$CC $CFLAGS -o $EXECUTABLE $BUILD_DIR/*.o
+echo "Linking object files..."
+$CC $CFLAGS -o $EXECUTABLE *.o
 
 # Clear Object files
-rm -rf $BUILD_DIR/
+echo "Cleaning up.."
+rm -rf *.o
 
 echo "Success!"

@@ -1,8 +1,9 @@
 #include "vm.h"
-#include "mem.h"
+#include "vm_conf.h"
 #include "impl.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 void
 vm_init(vm_p vm) {
@@ -14,13 +15,19 @@ vm_init(vm_p vm) {
 
 	/* Clear stacks */
 	for(vm->ip=0;;vm->ip++) {
-		vm->dstack[vm->ip] = 0;
-		vm->rstack[vm->ip] = 0;
+		vm->ds[vm->ip] = 0;
+		vm->rs[vm->ip] = 0;
 		if(vm->ip==STACK_END) break;
 	}
 
-	/* Set up 'pointers' */
-	vm->ip = vm->sp = vm->rp = 0;
+	/* Clear pointers */
+	vm->ip = vm->dp = vm->rp = 0;
+}
+
+int
+vm_ended(vm_p vm) {
+	if(vm->ip==MEM_END) return -1;
+	return 0;
 }
 
 void
@@ -30,41 +37,57 @@ vm_exec(vm_p vm) {
 
 void
 vm_stat(vm_p vm) {
-	/* Memory */
+	/* Print Memory */
 	printf("mem:\n");
-	for (int i = 0; i < MEM_SIZE; i++) {
+	for(int i=0;i<MEM_SIZE;i++) {
+		int count = 1;
 		printf("%02X ", vm->mem[i]);
-		if ((i + 1) % 16 == 0) {
+		if((i+1) % 16 == 0) {
 			printf("\n");
 		}
-		if(((i+1)%16==0)&&vm->mem[i]==0&&vm->mem[i+1]==0) break;
+		while(vm->mem[i] == vm->mem[i+1] && i<MEM_END) {
+			count++;
+			i++;
+		}
+		if(count>1) printf("(%d) ", count);
 	}
 	printf("\n");
 
-	/* Data stack */
-	printf("DStack:\n");
-	for (int i = 0; i < STACK_SIZE; i++) {
-		printf("%02X ", vm->dstack[i]);
+	/* Print Data Stack */
+	printf("ds:\n");
+	for (int i=0;i<STACK_SIZE;i++) {
+		int count = 1;
+		printf("%02X ", vm->ds[i]);
 		if ((i + 1) % 16 == 0) {
 			printf("\n");
 		}
-		if((vm->dstack[i]==0)&&(vm->dstack[i+1]==0)) break;
+		while(vm->ds[i] == vm->ds[i+1] && i<STACK_END) {
+			count++;
+			i++;
+		}
+		if(count>1) printf("(%d) ", count);
 	}
 	printf("\n");
 
-	/* Return stack */
-	printf("RStack:\n");
-	for (int i = 0; i < STACK_SIZE; i++) {
-	printf("%02X ", vm->rstack[i]);
+	/* Print Return Stack */
+	printf("rs:\n");
+	for (int i=0; i<STACK_SIZE;i++) {
+		int count = 1;
+		printf("%02X ", vm->rs[i]);
 		if ((i + 1) % 16 == 0) {
 			printf("\n");
 		}
-		if((vm->rstack[i]==0)&&(vm->rstack[i+1]==0)) break;
+		while(vm->rs[i] == vm->rs[i+1] && i<STACK_END) {
+			count++;
+			i++;
+		}
+		if(count>1) printf("(%d) ", count);
 	}
 	printf("\n");
 
-	/* Pointers */
-	printf("ip: 0x%02X\n", vm->ip);
-	printf("sp: 0x%02X\n", vm->sp);
+	/* Print 'Pointers' */
+	printf("ip: 0x%04X\n", vm->ip);
+	printf("dp: 0x%02X\n", vm->dp);
 	printf("rp: 0x%02X\n", vm->rp);
+	printf("\n");
 }

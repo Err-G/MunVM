@@ -10,21 +10,21 @@
 
 void
 test(vm_p vm) {
+//	vm->mem[] = ;
 	vm->mem[0] = OP_NOP; 
 	vm->mem[1] = OP_LIT;
-	vm->mem[2] = 0xfa;
+	vm->mem[2] = 0x0f;
 	vm->mem[3] = OP_POP;
-	vm->mem[4] = OP_END;
+	vm->mem[4] = OP_HLT;
 }
 
 int
 main(void) {
-	mem_verify();
 	vm_t vm;
 	vm_init(&vm);
 	test(&vm);
-
-	while((vm.ip<MEM_END)) {
+	
+	while(!vm_ended(&vm)) {
 		vm_exec(&vm);
 		vm_stat(&vm);
 	}

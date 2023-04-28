@@ -4,12 +4,11 @@
 /* Types */
 
 typedef unsigned char byte;      /* 8b  */
-typedef unsigned short int cell; /* 16b */
+typedef unsigned short int addr; /* 16b */
 
 /* Pointers */
 
 typedef byte* byte_p;
-typedef cell* cell_p;
 
 /* Sizes */
 
