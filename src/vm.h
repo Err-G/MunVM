@@ -1,11 +1,20 @@
 #ifndef VM_H
 #define VM_H
 
-/* Includes */
-
-#include "vm_conf.h"
-
 /* Types */
+
+typedef unsigned char byte;
+typedef unsigned short int addr;
+
+/* Sizes */
+
+#define MEM_SIZE 0x10000
+#define STACK_SIZE 0x100
+
+#define MEM_END 0xffff
+#define STACK_END 0xff
+
+/* VM */
 
 typedef struct {
 	/* Memory */
@@ -16,17 +25,17 @@ typedef struct {
 	byte rs[STACK_SIZE]; /* Return Stack */
 
 	/* Pointers */
-	byte dp, rp; /* Data Pointer & Return Pointer */
-	addr ip;     /* Instruction Pointer           */
+	byte dp, rp; /* Data Pointer, Return Pointer */
+	addr pc;     /* Program Counter              */
 } vm_t;
-
 typedef vm_t* vm_p;
 
 /* Prototypes */
 
 void vm_init(vm_p vm);
-int vm_ended(vm_p vm);
-void vm_exec(vm_p vm);
-void vm_stat(vm_p vm);
+
+/* modular instruction set by vm_exec
+ * yes this is a feature... */
+extern void vm_exec(vm_p vm);
 
 #endif
