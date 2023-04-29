@@ -19,7 +19,9 @@ the `build.sh` and run `vm`.
 ```bash
 git clone https://github.com/err-g/MunVM
 cd MunVM
-./build.sh;./vm
+make
+# Run the vm
+./vm
 ```
 
 ## How to use
